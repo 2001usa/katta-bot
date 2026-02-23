@@ -69,7 +69,7 @@ async def action(msg: Message, state: FSMContext):
     data = await state.get_data()
     message_id = data.get("message_id")
 
-    users = get_all_user_id_base()
+    users = await get_all_user_id_base()
     sended = 0
     not_sended = 0
 
@@ -206,7 +206,7 @@ async def action(msg: Message, state: FSMContext):
     data = await state.get_data()
     message_id = data.get("message_id")
 
-    users = get_all_user_id_base()
+    users = await get_all_user_id_base()
     sended = 0
     not_sended = 0
 

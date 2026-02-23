@@ -1,0 +1,23 @@
+services:
+  - type: worker
+    name: bilmadim-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: BOT_USERNAME
+        sync: false
+      - key: TRAILERS_BASE_CHAT
+        sync: false
+      - key: SERIES_BASE_CHAT
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: ADS_MANAGER_USERNAME
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false

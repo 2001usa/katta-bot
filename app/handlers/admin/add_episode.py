@@ -51,7 +51,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     command = call.data.split(",")[1]
     if command == "media":
         media_id = int(call.data.split(",")[2])
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         trailer_id = media['trailer_id']
         name = media['name']
@@ -86,7 +86,7 @@ async def action(msg: Message, state: FSMContext):
     await msg.bot.delete_message(chat_id=msg.chat.id,message_id=message_id)
 
     name = msg.text
-    medias = search_media_base(name,"any")
+    medias = await search_media_base(name,"any")
 
     if medias:
         await msg.answer("<b>📚Kerakli mediani tanlang :</b>",parse_mode=ParseMode.HTML,reply_markup=act_2_clbtn(medias))
@@ -113,8 +113,8 @@ async def action(msg: Message, state: FSMContext):
     episode_id = episode.video.file_id
     msg_id = episode.message_id
 
-    add_episode_base(media_id,episode_id,episode_num,msg_id)
-    update_media_episodes_count_plus_base(media_id)
+    await add_episode_base(media_id,episode_id,episode_num,msg_id)
+    await update_media_episodes_count_plus_base(media_id)
 
     # Send simple confirmation
     await msg.reply(f"<b>✅ {episode_num}-qism saqlandi.</b>\n👇KEYINGI qismni yuboring yoki /theend buyrug'ini yuboring.", parse_mode=ParseMode.HTML)

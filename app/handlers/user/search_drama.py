@@ -59,7 +59,7 @@ async def action(call: CallbackQuery, state: FSMContext):
 
     if command == "media":
         media_id = int(call.data.split(",")[2])
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
         
         trailer_id = media["trailer_id"]
         msg_id = media.get("msg_id")
@@ -126,7 +126,7 @@ async def action(msg: Message, state: FSMContext):
         pass
 
     name = msg.text
-    medias = search_media_base(name,"drama")
+    medias = await search_media_base(name,"drama")
 
     if medias:
         await msg.answer("<b>📚Kerakli animeni tanlang :</b>",parse_mode=ParseMode.HTML,reply_markup=user_act_3_clbtn(medias))

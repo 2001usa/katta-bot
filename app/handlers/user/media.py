@@ -45,8 +45,8 @@ async def action(call: CallbackQuery, state: FSMContext):
 
     if command == "watch":
         media_id = int(call.data.split(",")[2])
-        media_episodes = get_media_episodes_base(media_id)
-        media = get_media_base(media_id)
+        media_episodes = await get_media_episodes_base(media_id)
+        media = await get_media_base(media_id)
 
         name = media["name"]
         first_episode = media_episodes[0]
@@ -71,10 +71,10 @@ async def action(call: CallbackQuery, state: FSMContext):
         page = int(call.data.split(",")[3])
         media_id = int(call.data.split(",")[4])
 
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
         name = media['name']
 
-        media_episodes = get_media_episodes_base(media_id)
+        media_episodes = await get_media_episodes_base(media_id)
         episode = media_episodes[episode_num-1]
 
         caption = f"""
@@ -98,7 +98,7 @@ async def action(call: CallbackQuery, state: FSMContext):
         episode_num = int(call.data.split(",")[4])
         media_id = int(call.data.split(",")[3])
 
-        media_episodes = get_media_episodes_base(media_id)
+        media_episodes = await get_media_episodes_base(media_id)
         episode = media_episodes[episode_num-1]
 
         await call.message.delete()

@@ -59,7 +59,7 @@ async def action(msg: Message, state: FSMContext):
     media_id = msg.text
 
     if media_id.isdigit():
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         if media:
         

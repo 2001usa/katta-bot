@@ -52,7 +52,7 @@ async def action(call: CallbackQuery, state: FSMContext):
 @sponsor_router.callback_query(F.data.startswith('c'),Sponsor.add)
 async def action(call: CallbackQuery, state: FSMContext):
 
-    sponsors = get_all_sponsors_base()
+    sponsors = await get_all_sponsors_base()
     await state.set_state(Sponsor.menu)
     
     await call.message.edit_text(
@@ -74,10 +74,10 @@ async def action(call: CallbackQuery, state: FSMContext):
 
     elif command == "channel":
         channel_id = int(call.data.split(",")[2])
-        channel = get_single_sponsors_base(channel_id)
-        delete_sponsor_base(channel_id)
+        channel = await get_single_sponsors_base(channel_id)
+        await delete_sponsor_base(channel_id)
 
-        sponsors = get_all_sponsors_base()
+        sponsors = await get_all_sponsors_base()
 
         await state.set_state(Sponsor.menu)
 
@@ -164,8 +164,8 @@ async def action(msg: Message, state: FSMContext):
 
     name = msg.text
 
-    add_sponsor_base(0,name,url,"link",0)
-    sponsors = get_all_sponsors_base()
+    await add_sponsor_base(0,name,url,"link",0)
+    sponsors = await get_all_sponsors_base()
 
     await state.clear()
     await state.set_state(Sponsor.menu)
@@ -246,8 +246,8 @@ async def action(msg: Message, state: FSMContext):
 
     if limit.isdigit():
 
-        add_sponsor_base(channel_id,name,url,type,limit)
-        sponsors = get_all_sponsors_base()
+        await add_sponsor_base(channel_id,name,url,type,limit)
+        sponsors = await get_all_sponsors_base()
 
         await state.clear()
         await state.set_state(Sponsor.menu)

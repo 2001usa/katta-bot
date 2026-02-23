@@ -56,7 +56,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     command = call.data.split(",")[1]
     if command == "media":
         media_id = int(call.data.split(",")[2])
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         trailer_id = media['trailer_id']
         name = media['name']
@@ -105,7 +105,7 @@ async def action(msg: Message, state: FSMContext):
     await msg.bot.delete_message(chat_id=msg.chat.id,message_id=message_id)
 
     name = msg.text.strip()  # Remove extra spaces
-    medias = search_media_base(name,"any")
+    medias = await search_media_base(name,"any")
 
     if medias:
         await msg.answer("<b>📚Kerakli mediani tanlang :</b>",parse_mode=ParseMode.HTML,reply_markup=act_2_clbtn(medias))
@@ -155,7 +155,7 @@ async def action(call: CallbackQuery, state: FSMContext):
 
         elif command == "delete":
             # Confirm deletion
-            media = get_media_base(media_id)
+            media = await get_media_base(media_id)
             name = media['name']
             
             text = f"""
@@ -176,11 +176,11 @@ Bu amalni bekor qilib bo'lmaydi!
 
         elif command == "confirm_delete":
             media_id = int(call.data.split(",")[2])
-            media = get_media_base(media_id)
+            media = await get_media_base(media_id)
             name = media['name']
             
             # Delete media and all episodes
-            delete_media_base(media_id)
+            await delete_media_base(media_id)
             
             await call.message.delete()
             await state.clear()
@@ -189,7 +189,7 @@ Bu amalni bekor qilib bo'lmaydi!
 
         elif command == "cancel_delete":
             # Return to media view
-            media = get_media_base(media_id)
+            media = await get_media_base(media_id)
             
             trailer_id = media['trailer_id']
             name = media['name']
@@ -222,8 +222,8 @@ Bu amalni bekor qilib bo'lmaydi!
         elif command == "status":
             command = call.data.split(",")[3]
 
-            update_media_status_base(media_id,command)
-            media = get_media_base(media_id)
+            await update_media_status_base(media_id,command)
+            media = await get_media_base(media_id)
 
             name = media['name']
             genre = media['genre']
@@ -264,7 +264,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     media_id = data.get("media_id")
     await state.clear()
 
-    media = get_media_base(media_id)
+    media = await get_media_base(media_id)
 
     name = media['name']
     genre = media['genre']
@@ -308,11 +308,11 @@ async def action(msg: Message, state: FSMContext):
     media_id = data.get("media_id")
     message_id = data.get("message_id")
 
-    update_media_dub_base(media_id,dub)
+    await update_media_dub_base(media_id,dub)
 
     await state.clear()
 
-    media = get_media_base(media_id)
+    media = await get_media_base(media_id)
 
     name = media['name']
     genre = media['genre']
@@ -354,7 +354,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     media_id = data.get("media_id")
     await state.clear()
 
-    media = get_media_base(media_id)
+    media = await get_media_base(media_id)
 
     name = media['name']
     genre = media['genre']
@@ -399,11 +399,11 @@ async def action(msg: Message, state: FSMContext):
         media_id = data.get("media_id")
         message_id = data.get("message_id")
 
-        update_media_tag_base(media_id,tag)
+        await update_media_tag_base(media_id,tag)
 
         await state.clear()
 
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         name = media['name']
         genre = media['genre']
@@ -452,7 +452,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     media_id = data.get("media_id")
     await state.clear()
 
-    media = get_media_base(media_id)
+    media = await get_media_base(media_id)
 
     name = media['name']
     genre = media['genre']
@@ -497,11 +497,11 @@ async def action(msg: Message, state: FSMContext):
         media_id = data.get("media_id")
         message_id = data.get("message_id")
 
-        update_media_genre_base(media_id,genre)
+        await update_media_genre_base(media_id,genre)
 
         await state.clear()
 
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         name = media['name']
         genre = media['genre']
@@ -549,7 +549,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     media_id = data.get("media_id")
     await state.clear()
 
-    media = get_media_base(media_id)
+    media = await get_media_base(media_id)
 
     name = media['name']
     genre = media['genre']
@@ -593,11 +593,11 @@ async def action(msg: Message, state: FSMContext):
     media_id = data.get("media_id")
     message_id = data.get("message_id")
 
-    update_media_name_base(media_id,name)
+    await update_media_name_base(media_id,name)
 
     await state.clear()
 
-    media = get_media_base(media_id)
+    media = await get_media_base(media_id)
 
     name = media['name']
     genre = media['genre']

@@ -75,7 +75,7 @@ async def action(msg: Message, state: FSMContext):
     command = msg.text
     
     is_admin = False
-    user = get_user_base(msg.from_user.id)
+    user = await get_user_base(msg.from_user.id)
     if user['is_admin'] == True:
         is_admin = True
 
@@ -109,7 +109,7 @@ async def action(msg: Message, state: FSMContext):
 
     elif command == "📊Statistika":
 
-        statistics = get_statistics_base()
+        statistics = await get_statistics_base()
         users_count = statistics['users_count']
         anime_count = statistics['anime_count']
         drama_count = statistics['drama_count']
@@ -162,7 +162,7 @@ async def action(msg: Message, state: FSMContext):
             await state.clear()
             await state.set_state(Sponsor.menu)
 
-            sponsors = get_all_sponsors_base()
+            sponsors = await get_all_sponsors_base()
 
             a = await msg.answer("<b>🔐Homiy kanallar</b>",reply_markup=act_8_clbtn(sponsors),parse_mode=ParseMode.HTML)
             await state.update_data(message_id = a.message_id)
@@ -171,7 +171,7 @@ async def action(msg: Message, state: FSMContext):
             await state.clear()
             await state.set_state(Staff.menu)
 
-            staff_list = get_all_staff_base()
+            staff_list = await get_all_staff_base()
 
             a = await msg.answer("<b>👔Adminlar</b>",reply_markup=act_9_clbtn(staff_list),parse_mode=ParseMode.HTML)
             await state.update_data(message_id = a.message_id)

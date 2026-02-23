@@ -14,4 +14,4 @@ async def handle_join_request(request: ChatJoinRequest):
     user_id = request.from_user.id
     chat_id = request.chat.id
 
-    add_sponsor_request_base(chat_id,user_id)
+    await add_sponsor_request_base(chat_id,user_id)

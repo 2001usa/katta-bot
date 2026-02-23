@@ -162,7 +162,7 @@ async def action(msg: Message, state: FSMContext):
         trailer = trailer1.video.file_id
         trailer_msg_id = trailer1.message_id
 
-        media_id = add_media_base(trailer,name,genre,tag,dub,msg_id=trailer_msg_id,type=type)
+        media_id = await add_media_base(trailer,name,genre,tag,dub,msg_id=trailer_msg_id,type=type)
         await state.clear()
         await state.set_state(Admin.menu)
 

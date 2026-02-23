@@ -39,7 +39,7 @@ async def action(msg: Message, state: FSMContext):
 @staff_router.callback_query(F.data.startswith('c'),Staff.add)
 async def action(call: CallbackQuery, state: FSMContext):
     
-    staff_list = get_all_staff_base()
+    staff_list = await get_all_staff_base()
     await state.set_state(Staff.menu)
     
     await call.message.edit_text(
@@ -67,10 +67,10 @@ async def action(call: CallbackQuery, state: FSMContext):
 
     elif command == "staff":
         user_id = int(call.data.split(",")[2])
-        user = get_user_base(user_id)
-        update_user_staff_base(user_id,0)
+        user = await get_user_base(user_id)
+        await update_user_staff_base(user_id,0)
 
-        staff_list = get_all_staff_base()
+        staff_list = await get_all_staff_base()
 
         await state.set_state(Staff.menu)
 
@@ -85,13 +85,13 @@ async def action(msg: Message, state: FSMContext):
 
     if msg.text.isdigit():
         user_id = int(msg.text)
-        user = get_user_base(user_id)
+        user = await get_user_base(user_id)
 
         if user:
-            update_user_staff_base(user_id,1)
+            await update_user_staff_base(user_id,1)
             await msg.delete()
 
-            staff_list = get_all_staff_base()
+            staff_list = await get_all_staff_base()
             await state.set_state(Staff.menu)
             
             await msg.bot.edit_message_text(

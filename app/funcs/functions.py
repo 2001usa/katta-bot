@@ -30,11 +30,11 @@ async def check_user_subscribes(sponsors, msg):
                 if chat_member.status in ["restricted", "left", "kicked"]:
                     not_sub_channels.append(i)
                 else:
-                    add_sponsor_request_base(i["channel_id"],msg.from_user.id)
+                    await add_sponsor_request_base(i["channel_id"],msg.from_user.id)
 
             elif i["type"] == "request":
                 
-                user = get_sponsor_request_base(i['channel_id'],msg.from_user.id)
+                user = await get_sponsor_request_base(i['channel_id'],msg.from_user.id)
                 if not user:
                     chat_member = await msg.bot.get_chat_member(
                         chat_id=i["channel_id"],
@@ -44,7 +44,7 @@ async def check_user_subscribes(sponsors, msg):
                         not_sub_channels.append(i)
 
         except:
-            delete_sponsor_base(i['channel_id'])
+            await delete_sponsor_base(i['channel_id'])
 
     if len(not_sub_channels) > 0:
         for i in sponsors:

@@ -55,7 +55,7 @@ async def action(msg: Message, state: FSMContext):
     await msg.bot.delete_message(chat_id=msg.chat.id,message_id=message_id)
 
     name = msg.text
-    medias = search_media_base(name,"any")
+    medias = await search_media_base(name,"any")
 
     if medias:
         await msg.answer("<b>📚Kerakli mediani tanlang :</b>",parse_mode=ParseMode.HTML,reply_markup=act_2_clbtn(medias))
@@ -69,7 +69,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     command = call.data.split(",")[1]
     if command == "media":
         media_id = int(call.data.split(",")[2])
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         trailer_id = media['trailer_id']
         name = media['name']
@@ -151,7 +151,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     channel_id = data.get("channel_id")
 
     if command == "yeah":
-        media = get_media_base(media_id)
+        media = await get_media_base(media_id)
 
         trailer_id = media['trailer_id']
         name = media['name']

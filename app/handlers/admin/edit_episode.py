@@ -53,12 +53,12 @@ async def action(call: CallbackQuery, state: FSMContext):
     command = call.data.split(",")[1]
     if command == "media":
         media_id = int(call.data.split(",")[2])
-        episodes = get_media_episodes_base(media_id=media_id)
+        episodes = await get_media_episodes_base(media_id=media_id)
         if episodes:
             await state.set_state(Edit_episode.menu)
             await call.message.delete()
 
-            name = get_media_base(media_id)['name']
+            name = (await get_media_base(media_id))['name']
             episode_1 = episodes[0]
             episode_id = episode_1['episode_id']
 
@@ -92,7 +92,7 @@ async def action(msg: Message, state: FSMContext):
     await msg.bot.delete_message(chat_id=msg.chat.id,message_id=message_id)
 
     name = msg.text
-    medias = search_media_base(name,"media")
+    medias = await search_media_base(name,"media")
 
     if medias:
         await msg.answer("<b>📚Kerakli mediani tanlang :</b>",parse_mode=ParseMode.HTML,reply_markup=act_2_clbtn(medias))
@@ -113,7 +113,7 @@ async def action(call: CallbackQuery, state: FSMContext):
         media_id = int(call.data.split(",")[2].split("-")[0])
         episode_num = int(call.data.split(",")[2].split("-")[1])
 
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
         episode = episodes[episode_num-1]
         episode_id = episode['episode_id']
 
@@ -132,7 +132,7 @@ async def action(call: CallbackQuery, state: FSMContext):
 
         await state.set_state(Edit_episode.edit)
 
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
         episode = episodes[episode_num-1]
         episode_id = episode['episode_id']
 
@@ -168,7 +168,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     
     if command == "back":
 
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
         episode_id = episodes[0]['episode_id']
 
         text = f"""
@@ -202,11 +202,11 @@ Bu amalni bekor qilib bo'lmaydi!
 
     elif command == "confirm_delete":
         episode_num = int(call.data.split(",")[2].split("-")[1])
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
         
         # Delete the episode
-        delete_episode_base(media_id,episode_num)
-        update_media_episodes_count_minus_base(media_id)
+        await delete_episode_base(media_id,episode_num)
+        await update_media_episodes_count_minus_base(media_id)
         
         # Renumber remaining episodes that come after the deleted one
         for ep in episodes:
@@ -217,7 +217,7 @@ Bu amalni bekor qilib bo'lmaydi!
         await call.answer(f"{episode_num} - qism o'chirildi✅",show_alert=True)
 
         # Get updated episodes list
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
         
         if len(episodes) != 0:
             # Show the episode at the same position, or the last one if we deleted the last episode
@@ -246,7 +246,7 @@ Bu amalni bekor qilib bo'lmaydi!
     elif command == "cancel_delete":
         # Return to episode edit view
         episode_num = int(call.data.split(",")[2].split("-")[1])
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
         episode = episodes[episode_num-1]
         episode_id = episode['episode_id']
 
@@ -264,7 +264,7 @@ Bu amalni bekor qilib bo'lmaydi!
 
     elif command == "replace":
         episode_num = int(call.data.split(",")[2].split("-")[1])
-        episodes = get_media_episodes_base(media_id)
+        episodes = await get_media_episodes_base(media_id)
 
         episode = episodes[episode_num-1]
         episode_id = episode['episode_id']
@@ -290,7 +290,7 @@ async def action(call: CallbackQuery, state: FSMContext):
     name = data.get("name")
     media_id = data.get("media_id")
 
-    episodes = get_media_episodes_base(media_id)
+    episodes = await get_media_episodes_base(media_id)
     episode_id = episodes[0]['episode_id']
 
     text = f"""
@@ -315,11 +315,11 @@ async def action(msg: Message, state: FSMContext):
     new_episode = await msg.bot.forward_message(chat_id=series_base_chat,from_chat_id=msg.chat.id,message_id=msg.message_id)
     new_episode_id = new_episode.video.file_id
 
-    update_episode_base(media_id,episode_num,new_episode_id)
+    await update_episode_base(media_id,episode_num,new_episode_id)
 
     await msg.delete()
 
-    episodes = get_media_episodes_base(media_id)
+    episodes = await get_media_episodes_base(media_id)
     # episodes index starts at 0, episode_num starts at 1
     # Check if episode_num corresponds to a valid index
     if 0 < episode_num <= len(episodes):

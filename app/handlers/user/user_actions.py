@@ -56,13 +56,13 @@ async def action(msg: Message, state: FSMContext):
 async def admin_command(msg: Message, state: FSMContext):
 
     user_id = msg.from_user.id
-    user = get_user_base(user_id)
+    user = await get_user_base(user_id)
 
     if user_id in admin_ids or user["is_admin"] == True or user["is_staff"] == True:
         await state.clear()
         
         if user_id in admin_ids and user["is_admin"] == False:
-             update_user_admin_base(user_id,True)
+             await update_user_admin_base(user_id,True)
 
         await state.set_state(Admin.menu)
         await msg.answer(act_2_lang(),reply_markup=act_2_btn(),parse_mode=ParseMode.HTML)
@@ -75,13 +75,13 @@ async def admin_command(msg: Message, state: FSMContext):
 async def panel_command(msg: Message, state: FSMContext):
 
     user_id = msg.from_user.id
-    user = get_user_base(user_id)
+    user = await get_user_base(user_id)
 
     if user_id in admin_ids or user["is_admin"] == True or user["is_staff"] == True:
         await state.clear()
         
         if user_id in admin_ids and user["is_admin"] == False:
-             update_user_admin_base(user_id,True)
+             await update_user_admin_base(user_id,True)
 
         await state.set_state(Admin.menu)
         await msg.answer(act_2_lang(),reply_markup=act_2_btn(),parse_mode=ParseMode.HTML)
@@ -99,17 +99,17 @@ async def action(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     username = msg.from_user.username
 
-    user = get_user_base(user_id)
+    user = await get_user_base(user_id)
     if not user:
         # Agar foydalanuvchi admin_ids ro'yxatida bo'lsa, avtomatik admin qilamiz
         is_admin = user_id in admin_ids
-        add_user_base(user_id, username, is_admin=is_admin)
+        await add_user_base(user_id, username, is_admin=is_admin)
     else:
         # Update existing user if they are in config admin_ids but not admin in DB
         if user_id in admin_ids and user["is_admin"] == False:
-             update_user_admin_base(user_id,True)
+             await update_user_admin_base(user_id,True)
 
-    sponsors = get_all_sponsors_base()
+    sponsors = await get_all_sponsors_base()
     not_sub_channels = await check_user_subscribes(sponsors,msg)
 
     if not_sub_channels:
@@ -125,7 +125,7 @@ async def action(msg: Message, state: FSMContext):
         if command.isdigit():
             media_id = int(command)
 
-            media = get_media_base(media_id)
+            media = await get_media_base(media_id)
         
             trailer_id = media["trailer_id"]
 
@@ -161,8 +161,8 @@ async def action(msg: Message, state: FSMContext):
         elif "serie" in command.lower():
             media_id = int(command.replace("serie",""))
 
-            media_episodes = get_media_episodes_base(media_id)
-            media = get_media_base(media_id)
+            media_episodes = await get_media_episodes_base(media_id)
+            media = await get_media_base(media_id)
 
             name = media["name"]
             last_episode = media_episodes[-1]
@@ -285,7 +285,7 @@ async def action(call: CallbackQuery, state: FSMContext):
 
     elif command == "list":
 
-        medias = get_all_media_base("anime")
+        medias = await get_all_media_base("anime")
         with open("Animelar_royxati.txt", "w", encoding="utf-8") as file:
             file.write("Botidagi barcha Animelar ro'yxati:\n\n")
             num = 0
@@ -301,7 +301,7 @@ Janri : {i['genre'].replace(","," ")}"""
         await call.message.answer_document(document,caption="🔸<b>Animelar ro'yxati</b>",parse_mode=ParseMode.HTML)
         os.remove("Animelar_royxati.txt")
 
-        medias = get_all_media_base("drama")
+        medias = await get_all_media_base("drama")
         with open("Dramalar_royxati.txt", "w", encoding="utf-8") as file:
             file.write("Botidagi barcha Dramalar ro'yxati:\n\n")
             num = 0
@@ -405,7 +405,7 @@ Tanlang:
         await msg.answer(text, parse_mode=ParseMode.HTML)
     
     elif command == "Animelar ro'yxati📓":
-        medias = get_all_media_base("anime")
+        medias = await get_all_media_base("anime")
         with open("Animelar_royxati.txt", "w", encoding="utf-8") as file:
             file.write("Botidagi barcha Animelar ro'yxati:\\n\\n")
             num = 0
@@ -421,7 +421,7 @@ Janri : {i['genre'].replace(","," ")}"""
         await msg.answer_document(document,caption="🔸<b>Animelar ro'yxati</b>",parse_mode=ParseMode.HTML)
         os.remove("Animelar_royxati.txt")
 
-        medias = get_all_media_base("drama")
+        medias = await get_all_media_base("drama")
         with open("Dramalar_royxati.txt", "w", encoding="utf-8") as file:
             file.write("Botidagi barcha Dramalar ro'yxati:\\n\\n")
             num = 0
@@ -438,7 +438,7 @@ Janri : {i['genre'].replace(","," ")}"""
         os.remove("Dramalar_royxati.txt")
     
     elif command == "OnGoing animelar🧧":
-        medias = get_all_ongoing_media_base()
+        medias = await get_all_ongoing_media_base()
         if medias:
             text = "<b>🧧OnGoing Animelar:</b>"
             await msg.answer(text, parse_mode=ParseMode.HTML, reply_markup=user_act_3_clbtn(medias))
